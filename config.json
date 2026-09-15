@@ -1,0 +1,17 @@
+{
+  "levels": [
+    {
+      "width": 40,
+      "height": 40,
+      "level_max_time": 90
+    },
+    
+    {
+      "width":                    21,
+      "height": 21,
+      "level_max_time": 120
+    }
+  ],
+  "lives": 3,
+  "seed": 42
+}
