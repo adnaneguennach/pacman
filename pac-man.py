@@ -65,7 +65,7 @@ def main() -> None:
 
     menu_bg = pygame.image.load("credits.jpg").convert()
     menu_bg = pygame.transform.scale(menu_bg, (screen_width, screen_height))
-    offset_x = (screen_width - m_pixel_w) // 2 # (1920 - 800) = 1120 / 2 = 560
+    offset_x = (screen_width - m_pixel_w) // 1.1 # (1920 - 800) = 1120 / 2 = 560
 
     offset_y = (screen_height - m_pixel_h)  // 2  # (1080 - 800) = 780 / 2 = 390
     print(screen_height, screen_width)
@@ -78,8 +78,8 @@ def main() -> None:
             if event.type == pygame.QUIT:
                 running = False
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    running = False
+                # if event.key == pygame.K_ESCAPE:
+                    # running = False
                 if current_state == GameState.MAIN_MENU:
                     if event.key == pygame.K_UP:
                         selected_index = (selected_index - 1) % len(menu_options)
@@ -94,11 +94,13 @@ def main() -> None:
                             current_state = GameState.SETTINGS
                         elif selected_index == 3:
                             running = False
+                    # elif event.key == pygame.K_ESCAPE:
+                        # current
                         
-                elif current_state == GameState.PLAYING:
-                    if event.key == pygame.K_0:
+                elif current_state in [GameState.PLAYING,GameState.CREDITS,GameState.SETTINGS] :
+                    if event.key == pygame.K_ESCAPE:
                         current_state = GameState.MAIN_MENU
-
+        
         if current_state == GameState.MAIN_MENU:
             screen.blit(menu_bg, (0, 0))
             title_surface = menu_font.render("PAC-MAN 42", True, (0, 255, 255))
@@ -120,6 +122,7 @@ def main() -> None:
 
         if current_state == GameState.PLAYING:    
             screen.fill('black')
+            #add a hug fnc
             for y in range(lvl1_height):
                 for x in range(lvl1_width):
                     cell = m_grid[y][x] # 9 
@@ -135,6 +138,12 @@ def main() -> None:
                         pygame.draw.rect(screen, 'blue', (px, py + TILE_SIZE - 2, TILE_SIZE, 2))
                     if cell & 8: # west
                         pygame.draw.rect(screen, 'blue', (px, py, 2, TILE_SIZE))
+            
+
+        if current_state == GameState.SETTINGS:
+            screen.blit(menu_bg, (0,0))
+            
+
 
         if current_state == GameState.CREDITS:
             screen.fill('black')
@@ -149,10 +158,6 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
-
-
-
 
 
 
