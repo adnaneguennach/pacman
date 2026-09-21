@@ -15,6 +15,10 @@ class GameState(Enum):
     GAME_OVER = 7
     VICTORY = 8
 
+freeze = False
+invisible = False
+speed = False
+
 def load_config(path):
     clean_str  = ""
     try:
@@ -65,14 +69,15 @@ def main() -> None:
 
     menu_bg = pygame.image.load("credits.jpg").convert()
     menu_bg = pygame.transform.scale(menu_bg, (screen_width, screen_height))
-    offset_x = (screen_width - m_pixel_w) // 1.1 # (1920 - 800) = 1120 / 2 = 560
+    offset_x = (screen_width - m_pixel_w) // 2 # (1920 - 800) = 1120 / 2 = 560
 
     offset_y = (screen_height - m_pixel_h)  // 2  # (1080 - 800) = 780 / 2 = 390
     print(screen_height, screen_width)
 
     menu_options = ["PLAY", "CREDITS", "SETTINGS", "QUIT"]
+    settings_options = ["INVISIBLITY","SPEED", "FREEZE", "BACK"]
     selected_index = 0
-
+    cd = 0
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -96,6 +101,29 @@ def main() -> None:
                             running = False
                     # elif event.key == pygame.K_ESCAPE:
                         # current
+                
+                elif current_state == GameState.SETTINGS:
+                    if event.key == pygame.K_UP:
+                        print(cd)
+                        cd = (cd - 1) % len(settings_options)
+                    elif event.key == pygame.K_DOWN:
+                        cd = (cd + 1) % len(settings_options)
+                    
+                    elif event.key == pygame.K_RETURN:
+                        if cd == 0:
+                            global invisible
+                            invisible = not invisible
+                        elif cd == 1:
+                            global speed
+                            speed = not speed
+                        elif cd == 2:
+                            global freeze
+                            freeze = not freeze
+                            print(freeze, "check freeze")
+                        elif cd == 3:
+                            current_state = GameState.MAIN_MENU
+                        
+
                         
                 elif current_state in [GameState.PLAYING,GameState.CREDITS,GameState.SETTINGS] :
                     if event.key == pygame.K_ESCAPE:
@@ -142,6 +170,20 @@ def main() -> None:
 
         if current_state == GameState.SETTINGS:
             screen.blit(menu_bg, (0,0))
+            title_surface = menu_font.render("SETTINGS", True, 'blue')
+            screen.blit(title_surface, (screen_width // 2 - 100, screen_height // 2 - 100))
+
+            for index, option in enumerate(settings_options):
+                if index == cd:
+                    color = 'yellow'
+                else:
+                    color = 'white'
+
+                text_sur = menu_font.render(option, True, color)
+                x_pos = screen_width // 2 - 70
+                y_pos = (screen_height // 2 - 20) + (index * 50)
+
+                screen.blit(text_sur, (x_pos, y_pos))
             
 
 
