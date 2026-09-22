@@ -41,6 +41,17 @@ def load_config(path):
         sys.exit(1)
 
 TILE_SIZE = 25
+
+pacgum_grid = []
+for y in range(lvl1_height):
+    row = []
+    for x in range(lvl1_width):
+        if m_grid[y][x] == 15:
+            row.append(0)
+        else:
+            row.append(1)
+    pacgum_grid.append(row)
+
 def main() -> None:
     config_file = sys.argv[1]
     game_config = load_config(config_file)
@@ -166,6 +177,9 @@ def main() -> None:
                         pygame.draw.rect(screen, 'blue', (px, py + TILE_SIZE - 2, TILE_SIZE, 2))
                     if cell & 8: # west
                         pygame.draw.rect(screen, 'blue', (px, py, 2, TILE_SIZE))
+                    
+                    center_x = px + (TILE_SIZE // 2)
+                    center_y = py + (TILE_SIZE // 2)
             
 
         if current_state == GameState.SETTINGS:
